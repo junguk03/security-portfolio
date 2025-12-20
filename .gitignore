@@ -1,0 +1,78 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# 민감 정보 (중요!)
+*.env
+*.env.local
+.env*.local
+*.key
+*.pem
+*.cert
+credentials.json
+secrets.txt
+api-keys.txt
+
+# 공격 결과물 (실습 후 생성되는 파일)
+stolen_data.txt
+attack_results.txt
+leaked_*.txt
+captured_*.txt
+*.captured
+**/attack-scripts/*.log
+**/attack-scripts/results/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+yarn.lock
+
+# TypeScript
+*.tsbuildinfo
+dist/
+build/
+*.min.js
+*.map
+
+# 임시 파일
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+
+# 테스트 DB (실습용)
+*.db
+*.sqlite
+*.sqlite3
+
+# Python (스크립트용)
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+venv/
+env/
+
+# 로그
+logs/
+*.log
+
+# IDE
+.idea/
+*.iml
+
+# Burp Suite
+burp-*.jar
+*.burp
