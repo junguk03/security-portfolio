@@ -10,7 +10,7 @@ OverTheWire 등 온라인 워게임 풀이 모음
 - URL: https://overthewire.org/wargames/bandit/
 - 난이도: 초급
 - 학습 내용: 리눅스 기초, 명령어, SSH, 파일 권한
-- 진행 상황: 5/34 레벨
+- 진행 상황: 6/34 레벨
 
 ### OverTheWire Natas
 - URL: https://overthewire.org/wargames/natas/
@@ -100,6 +100,35 @@ cat ./maybehere07/.file2
 - `-size 1033c`: 크기가 1033 바이트인 파일
 - `! -executable`: 실행 불가능한 파일
 
+### Level 7
+서버 전체에서 파일 찾기 (소유자, 그룹, 크기 조건)
+
+```bash
+find / -user bandit7 -group bandit6 -size 33c 2>/dev/null
+cat /var/lib/dpkg/info/bandit7.password
+```
+
+배운 것:
+
+**경로 개념**
+- `./`: 현재 디렉토리에서 시작 (상대 경로)
+- `/`: 루트(서버 전체)에서 시작 (절대 경로)
+- "somewhere on the server" → `/`에서 검색
+- `cat ./file`: 현재 위치의 파일
+- `cat /var/lib/file`: 절대 경로로 파일 접근
+
+**find 명령어 옵션**
+- `-user bandit7`: 소유자가 bandit7인 파일
+- `-group bandit6`: 그룹이 bandit6인 파일
+- `-size 33c`: 크기가 33바이트인 파일
+
+**스트림 리다이렉션**
+- stdin (0): 표준 입력
+- stdout (1): 표준 출력
+- stderr (2): 에러 출력
+- `2>/dev/null`: 에러 메시지를 /dev/null(휴지통)로 버림
+- Permission denied 같은 에러를 숨겨서 가독성 향상
+
 ---
 
 ## Natas 풀이
@@ -127,9 +156,9 @@ cat ./maybehere07/.file2
 
 ## 통계
 
-- 총 풀이한 레벨: 5개 (Bandit 0-5)
+- 총 풀이한 레벨: 6개 (Bandit 0-6)
 - 학습 시작일: 2025-12-14
-- 다음 목표: Bandit Level 6-10
+- 다음 목표: Bandit Level 7-10
 
 ---
 
