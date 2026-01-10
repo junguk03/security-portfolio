@@ -10,7 +10,7 @@ OverTheWire 등 온라인 워게임 풀이 모음
 - URL: https://overthewire.org/wargames/bandit/
 - 난이도: 초급
 - 학습 내용: 리눅스 기초, 명령어, SSH, 파일 권한
-- 진행 상황: 12/34 레벨
+- 진행 상황: 13/34 레벨
 
 ### OverTheWire Natas
 - URL: https://overthewire.org/wargames/natas/
@@ -197,7 +197,84 @@ cat data.txt | tr "A-Za-z" "N-ZA-Mn-za-m"
   - 같은 방식으로 두 번 적용하면 원문으로 복구됨
 
 ### Level 13
-(진행 중)
+다중 압축 해제 (hexdump → 여러 압축 형식)
+
+```bash
+# 1. 임시 작업 디렉토리 생성
+cd /tmp
+mktemp -d
+# 출력: /tmp/tmp.GtzBy6KtRw
+
+# 2. 생성된 임시 디렉토리로 이동
+cd /tmp/tmp.GtzBy6KtRw
+
+# 3. 작업할 파일 복사
+cp ~/data.txt .
+
+# 4. hexdump를 바이너리로 복원
+xxd -r data.txt > data
+
+# 5. 파일 타입 확인 후 압축 해제 반복
+file data
+
+# 압축 타입에 따라 확장자 변경 + 압축 해제
+# gzip인 경우:
+mv data data.gz
+gunzip data.gz
+file data
+
+# bzip2인 경우:
+mv data data.bz2
+bunzip2 data.bz2
+file data
+
+# tar 아카이브인 경우:
+tar -xvf data
+file data5.bin  # 추출된 파일 확인
+
+# 위 과정을 ASCII text가 나올 때까지 반복
+
+# 7. 최종 비밀번호 확인
+cat data8
+```
+
+배운 것:
+
+**임시 디렉토리 작업**
+- `mktemp -d`: 임시 디렉토리 생성 (안전한 작업 공간)
+- `/tmp`: 시스템 임시 파일 저장 위치
+- `~/`: 홈 디렉토리 경로 (현재 사용자의 홈)
+- `.`: 현재 디렉토리
+
+**hexdump 복원**
+- `xxd -r`: hexdump를 원본 바이너리로 역변환
+- `>`: 출력을 파일로 리다이렉션
+
+**파일 타입 확인 및 압축 해제**
+- `file`: 파일의 실제 타입 확인 (확장자와 무관)
+- 압축 형식별 명령어:
+  - **gzip**: `gunzip data.gz` (확장자 .gz 필요)
+  - **bzip2**: `bunzip2 data.bz2` (확장자 .bz2 필요)
+  - **xz**: `unxz data.xz` (확장자 .xz 필요)
+  - **zip**: `unzip data.zip`
+  - **tar**: `tar -xvf data` (tape archive, 여러 파일 묶음)
+
+**tar 명령어 옵션**
+- `-x`: extract (압축 풀기)
+- `-v`: verbose (처리 과정 출력)
+- `-f`: file (파일 이름 지정)
+
+**반복 압축 해제 과정**
+1. `file data`로 압축 형식 확인
+2. `mv data data.[확장자]`로 적절한 확장자 추가
+3. 해당 압축 해제 명령어 실행
+4. 압축이 풀리면 다시 `file data`로 확인
+5. `ASCII text`가 나올 때까지 반복
+
+**핵심 개념**
+- 파일은 다중으로 압축될 수 있음 (gzip → bzip2 → tar → gzip...)
+- 확장자는 단순 이름일 뿐, `file` 명령어로 실제 타입 확인 필요
+- 각 압축 도구는 특정 확장자를 요구하므로 `mv`로 이름 변경 필요
 
 ---
 
@@ -226,9 +303,9 @@ cat data.txt | tr "A-Za-z" "N-ZA-Mn-za-m"
 
 ## 통계
 
-- 총 풀이한 레벨: 12개 (Bandit 0-12)
+- 총 풀이한 레벨: 13개 (Bandit 0-13)
 - 학습 시작일: 2025-12-14
-- 다음 목표: Bandit Level 13-20
+- 다음 목표: Bandit Level 14-20
 
 ---
 
