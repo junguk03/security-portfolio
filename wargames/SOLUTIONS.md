@@ -10,7 +10,7 @@ OverTheWire 등 온라인 워게임 풀이 모음
 - URL: https://overthewire.org/wargames/bandit/
 - 난이도: 초급
 - 학습 내용: 리눅스 기초, 명령어, SSH, 파일 권한
-- 진행 상황: 13/34 레벨
+- 진행 상황: 14/34 레벨
 
 ### OverTheWire Natas
 - URL: https://overthewire.org/wargames/natas/
@@ -276,6 +276,31 @@ cat data8
 - 확장자는 단순 이름일 뿐, `file` 명령어로 실제 타입 확인 필요
 - 각 압축 도구는 특정 확장자를 요구하므로 `mv`로 이름 변경 필요
 
+### Level 14
+SSH 개인키를 이용한 접속
+
+```bash
+# 로컬에서 개인키 파일을 저장 후 경로 지정하여 접속
+ssh -i C:\Users\JungUk\bandit14_key.txt bandit14@bandit.labs.overthewire.org -p 2220
+```
+
+배운 것:
+
+**SSH 키 기반 인증**
+- `-i`: identity file, 개인키 파일 경로 지정
+- 비밀번호 대신 개인키 파일로 인증하는 방식
+- 서버의 공개키와 클라이언트의 개인키가 쌍을 이룸
+
+**트러블슈팅**
+- 에러: `no authentication methods enabled`
+- 원인: 비밀번호 인증이 비활성화된 서버에 비밀번호로 접속 시도
+- 해결: 개인키 파일을 로컬에 저장 후 `-i` 옵션으로 경로 지정
+
+**실무 연결**
+- 실제 서버 운영 시 비밀번호 인증보다 키 기반 인증이 더 안전
+- AWS EC2 등 클라우드 서버도 `.pem` 개인키 파일로 접속
+- 개인키 파일은 절대 공유하면 안 됨 (권한도 600으로 제한)
+
 ---
 
 ## Natas 풀이
@@ -303,7 +328,7 @@ cat data8
 
 ## 통계
 
-- 총 풀이한 레벨: 13개 (Bandit 0-13)
+- 총 풀이한 레벨: 14개 (Bandit 0-14)
 - 학습 시작일: 2025-12-14
 - 다음 목표: Bandit Level 14-20
 
