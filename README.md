@@ -1,5 +1,9 @@
 # Security Learning Archive
 
+![Days](https://img.shields.io/badge/Days-30+-blue)
+![Vulns](https://img.shields.io/badge/Vulnerabilities-0-red)
+![Wargames](https://img.shields.io/badge/Wargames-14%2F68-yellow)
+
 보안 학습 내용을 정리하고 관리하는 저장소
 
 ---
@@ -7,7 +11,7 @@
 ## 폴더 구조
 
 ```
-security test file/
+security-portfolio/
 ├── README.md
 ├── .gitignore
 ├── .gitmessage
@@ -21,30 +25,23 @@ security test file/
 │   └── LEARNING_LOG.md
 │
 ├── clashroyale-security/   # ClashRoyale 프로젝트 보안 학습
-│   ├── vulnerable/
-│   ├── secure/
-│   ├── attack-scripts/
-│   ├── reports/
-│   ├── screenshots/
-│   └── LEARNING_LOG.md
+│   └── ...
 │
 ├── wargames/               # 온라인 워게임 풀이
-│   ├── overthewire-bandit/
-│   ├── overthewire-natas/
-│   └── SOLUTIONS.md
+│   ├── README.md           # 전체 요약
+│   └── overthewire/
+│       ├── bandit/         # 리눅스 기초 (14/34)
+│       │   ├── README.md
+│       │   ├── level-00-to-05/
+│       │   ├── level-06-to-10/
+│       │   └── level-11-to-15/
+│       └── natas/          # 웹 보안 (0/34)
 │
 ├── general-security/       # 일반 보안 실습
-│   ├── vulnerable/
-│   ├── secure/
-│   ├── attack-scripts/
-│   ├── reports/
-│   └── LEARNING_LOG.md
+│   └── ...
 │
 └── docs/                   # 참고 자료
-    ├── burp-setup.md
-    ├── jwt-basics.md
-    ├── owasp-top10.md
-    └── tools-guide.md
+    └── ...
 ```
 
 ---
@@ -129,19 +126,25 @@ OWASP Top 10 등 일반적인 보안 취약점을 실습.
 
 ## 학습 진행 상황
 
-현재 상태:
-- 총 학습 일수: 1일
-- 발견한 취약점: 0개
-- 해결한 취약점: 0개
-- 워게임 레벨: 0개
+### 워게임
+| 워게임 | 진행 | 상태 |
+|--------|------|------|
+| [Bandit](./wargames/overthewire/bandit/README.md) | 14/34 | 진행 중 |
+| [Natas](./wargames/overthewire/natas/README.md) | 0/34 | 예정 |
+
+### 취약점 실습
+| 프로젝트 | 발견 | 해결 |
+|----------|------|------|
+| chatvas | 0 | 0 |
+| clashroyale | 0 | 0 |
+| general | 0 | 0 |
 
 진행 계획:
 - [x] 프로젝트 구조 설정
+- [x] Bandit Level 0-14 풀이
 - [ ] Burp Suite 설치 및 설정
 - [ ] chatvas 프로젝트 보안 분석 시작
-- [ ] ClashRoyale 프로젝트 보안 분석 시작
-- [ ] general-security 취약점 #1 실습
-- [ ] Bandit Level 0-5 풀이
+- [ ] Natas 워게임 시작
 
 ---
 
@@ -193,4 +196,4 @@ ssh bandit0@bandit.labs.overthewire.org -p 2220
 
 ---
 
-Last Updated: 2025-12-14
+Last Updated: 2026-01-03
