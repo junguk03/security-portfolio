@@ -1,6 +1,6 @@
 # OverTheWire Bandit
 
-![Progress](https://img.shields.io/badge/Progress-14%2F34-brightgreen)
+![Progress](https://img.shields.io/badge/Progress-15%2F34-brightgreen)
 ![Difficulty](https://img.shields.io/badge/Difficulty-Beginner-blue)
 
 리눅스 기초 명령어와 보안 개념을 학습하는 워게임
@@ -17,7 +17,7 @@
 |------|------|------|
 | [Level 0-5](./level-00-to-05/README.md) | 기초 명령어, 파일 시스템 | ✅ 완료 |
 | [Level 6-10](./level-06-to-10/README.md) | 파일 검색, 텍스트 처리 | ✅ 완료 |
-| [Level 11-15](./level-11-to-15/README.md) | 인코딩, 압축, SSH 키 | ✅ 완료 (14까지) |
+| [Level 11-15](./level-11-to-15/README.md) | 인코딩, 압축, SSH 키, 네트워크 | ✅ 완료 |
 | Level 16-20 | 네트워크, 포트 스캐닝 | ⏳ 진행 예정 |
 | Level 21-25 | cron, 스크립팅 | ⏳ 진행 예정 |
 | Level 26-30 | git, 권한 상승 | ⏳ 진행 예정 |

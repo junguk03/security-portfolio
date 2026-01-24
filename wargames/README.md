@@ -1,6 +1,6 @@
 # Wargames
 
-![Total Progress](https://img.shields.io/badge/Total-14%2F68-blue)
+![Total Progress](https://img.shields.io/badge/Total-15%2F68-blue)
 
 온라인 워게임 풀이 모음
 
@@ -10,7 +10,7 @@
 
 | 워게임 | 난이도 | 진행 상황 | 주제 |
 |--------|--------|-----------|------|
-| [Bandit](./overthewire/bandit/README.md) | 초급 | 14/34 | 리눅스 기초 |
+| [Bandit](./overthewire/bandit/README.md) | 초급 | 15/34 | 리눅스 기초 |
 | [Natas](./overthewire/natas/README.md) | 중급 | 0/34 | 웹 보안 |
 
 ---

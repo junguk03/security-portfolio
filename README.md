@@ -2,7 +2,7 @@
 
 ![Days](https://img.shields.io/badge/Days-30+-blue)
 ![Vulns](https://img.shields.io/badge/Vulnerabilities-0-red)
-![Wargames](https://img.shields.io/badge/Wargames-14%2F68-yellow)
+![Wargames](https://img.shields.io/badge/Wargames-15%2F68-yellow)
 
 보안 학습 내용을 정리하고 관리하는 저장소
 
@@ -30,7 +30,7 @@ security-portfolio/
 ├── wargames/               # 온라인 워게임 풀이
 │   ├── README.md           # 전체 요약
 │   └── overthewire/
-│       ├── bandit/         # 리눅스 기초 (14/34)
+│       ├── bandit/         # 리눅스 기초 (15/34)
 │       │   ├── README.md
 │       │   ├── level-00-to-05/
 │       │   ├── level-06-to-10/
@@ -129,7 +129,7 @@ OWASP Top 10 등 일반적인 보안 취약점을 실습.
 ### 워게임
 | 워게임 | 진행 | 상태 |
 |--------|------|------|
-| [Bandit](./wargames/overthewire/bandit/README.md) | 14/34 | 진행 중 |
+| [Bandit](./wargames/overthewire/bandit/README.md) | 15/34 | 진행 중 |
 | [Natas](./wargames/overthewire/natas/README.md) | 0/34 | 예정 |
 
 ### 취약점 실습
@@ -141,7 +141,7 @@ OWASP Top 10 등 일반적인 보안 취약점을 실습.
 
 진행 계획:
 - [x] 프로젝트 구조 설정
-- [x] Bandit Level 0-14 풀이
+- [x] Bandit Level 0-15 풀이
 - [ ] Burp Suite 설치 및 설정
 - [ ] chatvas 프로젝트 보안 분석 시작
 - [ ] Natas 워게임 시작
