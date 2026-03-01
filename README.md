@@ -2,7 +2,7 @@
 
 ![Days](https://img.shields.io/badge/Days-30+-blue)
 ![Vulns](https://img.shields.io/badge/Vulnerabilities-0-red)
-![Wargames](https://img.shields.io/badge/Wargames-15%2F68-yellow)
+![Wargames](https://img.shields.io/badge/Wargames-18%2F68-yellow)
 
 보안 학습 내용을 정리하고 관리하는 저장소
 
@@ -16,157 +16,142 @@ security-portfolio/
 ├── .gitignore
 ├── .gitmessage
 │
-├── chatvas-security/       # chatvas 프로젝트 보안 학습
-│   ├── vulnerable/         # 취약한 코드
-│   ├── secure/             # 수정된 코드
-│   ├── attack-scripts/     # 공격 스크립트
-│   ├── reports/            # 취약점 분석 문서
-│   ├── screenshots/        # Burp Suite 캡처
+├── chatvas-security/         # chatvas 프로젝트 보안 학습
+│   ├── vulnerable/
+│   ├── secure/
+│   ├── attack-scripts/
+│   ├── reports/
+│   ├── screenshots/
 │   └── LEARNING_LOG.md
 │
-├── clashroyale-security/   # ClashRoyale 프로젝트 보안 학습
-│   └── ...
+├── clashroyale-security/     # ClashRoyale 프로젝트 보안 학습
+│   ├── vulnerable/
+│   ├── secure/
+│   ├── attack-scripts/
+│   ├── reports/
+│   ├── screenshots/
+│   └── LEARNING_LOG.md
 │
-├── wargames/               # 온라인 워게임 풀이
-│   ├── README.md           # 전체 요약
-│   └── overthewire/
-│       ├── bandit/         # 리눅스 기초 (15/34)
-│       │   ├── README.md
-│       │   ├── level-00-to-05/
-│       │   ├── level-06-to-10/
-│       │   └── level-11-to-15/
-│       └── natas/          # 웹 보안 (0/34)
+├── wargames/                 # 온라인 워게임 풀이
+│   ├── README.md
+│   ├── overthewire/
+│   │   ├── bandit/           # 리눅스 기초 (18/34)
+│   │   │   ├── README.md
+│   │   │   ├── level-00-to-05/
+│   │   │   ├── level-06-to-10/
+│   │   │   ├── level-11-to-15/
+│   │   │   └── level-16-to-20/
+│   │   └── natas/            # 웹 보안 (0/34)
+│   └── dreamhack/            # 드림핵 (0/?)
 │
-├── general-security/       # 일반 보안 실습
-│   └── ...
+├── web-security-academy/     # PortSwigger 웹 보안 아카데미
+│   └── README.md
 │
-└── docs/                   # 참고 자료
-    └── ...
+├── general-security/         # 일반 보안 실습
+│   ├── vulnerable/
+│   ├── secure/
+│   ├── attack-scripts/
+│   ├── reports/
+│   └── LEARNING_LOG.md
+│
+└── docs/                     # 참고 자료
+    ├── burp-setup.md
+    ├── jwt-basics.md
+    ├── owasp-top10.md
+    └── tools-guide.md
 ```
 
 ---
 
-## 각 폴더 설명
+## 학습 영역
 
-### chatvas-security
+### 워게임
+| 플랫폼 | 진행 | 상태 | 링크 |
+|--------|------|------|------|
+| OverTheWire Bandit | 18/34 | 진행 중 | [바로가기](./wargames/overthewire/bandit/README.md) |
+| OverTheWire Natas | 0/34 | 예정 | [바로가기](./wargames/overthewire/natas/README.md) |
+| Dreamhack | 0/? | 예정 | [바로가기](./wargames/dreamhack/README.md) |
 
-chatvas 프로젝트에서 발견한 보안 취약점을 분석하고 수정하는 과정을 기록.
+### 학습 플랫폼
+| 플랫폼 | 진행 | 상태 | 링크 |
+|--------|------|------|------|
+| PortSwigger Web Security Academy | 0/? | 예정 | [바로가기](./web-security-academy/README.md) |
+
+### 프로젝트 취약점 분석
+| 프로젝트 | 발견 | 해결 | 상태 |
+|----------|------|------|------|
+| chatvas | 0 | 0 | 예정 |
+| clashroyale | 0 | 0 | 예정 |
+| general | 0 | 0 | 예정 |
+
+---
+
+## 진행 계획
+
+- [x] 프로젝트 구조 설정
+- [x] Bandit Level 0-18 풀이
+- [ ] Dreamhack 시작
+- [ ] Web Security Academy 시작
+- [ ] chatvas 프로젝트 보안 분석
+- [ ] clashroyale 프로젝트 보안 분석
+- [ ] Natas 워게임 시작
+
+---
+
+## 각 영역 설명
+
+### chatvas-security / clashroyale-security
+
+직접 개발한 프로젝트의 취약점을 찾고 분석하는 실습.
 
 작업 순서:
-1. vulnerable/ - 취약한 코드 작성
-2. attack-scripts/ - 공격 스크립트로 검증
-3. reports/ - 취약점 분석 문서 작성
-4. screenshots/ - Burp Suite로 캡처
-5. secure/ - 안전한 코드로 수정
-
-기술 스택: TypeScript, Node.js, Next.js
-
-### clashroyale-security
-
-ClashRoyale 프로젝트에서 발견한 보안 취약점을 분석하고 수정하는 과정을 기록.
-
-GitHub: https://github.com/junguk03/ClashRoyalProject
-
-작업 순서는 chatvas-security와 동일.
+1. `vulnerable/` - 취약한 코드 작성
+2. `attack-scripts/` - 공격 스크립트로 검증
+3. `reports/` - 취약점 분석 문서 작성 (공격 흐름 다이어그램 포함)
+4. `screenshots/` - Burp Suite로 캡처
+5. `secure/` - 안전한 코드로 수정
 
 ### wargames
 
-OverTheWire 등 온라인 워게임 풀이를 기록.
+- **Bandit**: 리눅스 기초 명령어, SSH, 파일 권한
+- **Natas**: 웹 취약점 (XSS, SQLi, LFI 등)
+- **Dreamhack**: 웹/시스템/리버싱 전 분야
 
-- Bandit: 리눅스 기초 (명령어, SSH, 파일 권한)
-- Natas: 웹 취약점 (XSS, SQL Injection, LFI 등)
+### web-security-academy
+
+Burp Suite 제작사의 무료 웹 보안 학습 플랫폼.
+실습 랩(Lab) 기반으로 체계적인 웹 취약점 학습.
 
 ### general-security
 
-OWASP Top 10 등 일반적인 보안 취약점을 실습.
-
-주요 실습 주제:
-- 인증 우회 (Authentication Bypass)
-- IDOR (Insecure Direct Object Reference)
-- JWT 조작
-- Mass Assignment
-- Rate Limiting 우회
-
-기술 스택: TypeScript, Python, Bash
-
-### docs
-
-공통 참고 자료 및 도구 사용법 정리.
+OWASP Top 10 기반 일반 취약점 실습:
+- 인증 우회 / IDOR / JWT 조작 / SSRF / XSS / SQLi
 
 ---
 
 ## 사용 도구
 
-### 필수
-- Burp Suite Community - 웹 보안 테스트
-- Firefox + FoxyProxy - 프록시 설정
-- curl, jq - API 테스트
-- VSCode - 코드 작성
-
-### 선택
-- Postman - API 테스트
-- Python - 공격 스크립트 작성
-- Docker - 격리된 환경 구성
+| 도구 | 용도 |
+|------|------|
+| Burp Suite | 웹 보안 테스트, 트래픽 캡처 |
+| nmap | 포트 스캐닝, 네트워크 탐색 |
+| openssl | TLS 연결, 암호화 분석 |
+| netcat (nc) | 네트워크 연결 |
+| Firefox + FoxyProxy | 프록시 설정 |
+| Python | 공격 스크립트 작성 |
 
 ---
 
 ## 커밋 규칙
 
-`.gitmessage` 템플릿 사용 (git commit 시 자동 적용)
-
-커밋 타입:
-- `vuln:` - 취약점 발견
-- `sec:` - 보안 수정
-- `docs:` - 문서 작성
-- `wargame:` - 워게임 풀이
-- `feat:` - 기능 추가
-- `fix:` - 버그 수정
-
----
-
-## 학습 진행 상황
-
-### 워게임
-| 워게임 | 진행 | 상태 |
-|--------|------|------|
-| [Bandit](./wargames/overthewire/bandit/README.md) | 15/34 | 진행 중 |
-| [Natas](./wargames/overthewire/natas/README.md) | 0/34 | 예정 |
-
-### 취약점 실습
-| 프로젝트 | 발견 | 해결 |
-|----------|------|------|
-| chatvas | 0 | 0 |
-| clashroyale | 0 | 0 |
-| general | 0 | 0 |
-
-진행 계획:
-- [x] 프로젝트 구조 설정
-- [x] Bandit Level 0-15 풀이
-- [ ] Burp Suite 설치 및 설정
-- [ ] chatvas 프로젝트 보안 분석 시작
-- [ ] Natas 워게임 시작
-
----
-
-## 시작하기
-
-### Burp Suite 설치
-
-docs/burp-setup.md 참고
-
-### 첫 취약점 실습
-
-```bash
-cd general-security/
-cat LEARNING_LOG.md
-```
-
-### 워게임 시작
-
-```bash
-ssh bandit0@bandit.labs.overthewire.org -p 2220
-# Password: bandit0
-```
+| 타입 | 내용 |
+|------|------|
+| `docs:` | 문서 작성 |
+| `vuln:` | 취약점 발견 |
+| `sec:` | 보안 수정 |
+| `feat:` | 기능 추가 |
+| `fix:` | 버그 수정 |
+| `refactor:` | 구조 개선 |
 
 ---
 
@@ -174,25 +159,14 @@ ssh bandit0@bandit.labs.overthewire.org -p 2220
 
 절대 실제 서비스에 공격하지 말 것. 이 저장소의 모든 내용은 학습 목적으로만 사용.
 
-학습 원칙:
-1. 취약점 발견 → 공격 → 분석 → 수정 순서
-2. 모든 과정을 문서화
-3. Burp Suite로 트래픽 캡처
-4. Git으로 진행 상황 추적
-
 ---
 
 ## 참고 자료
 
 - [OverTheWire Wargames](https://overthewire.org/wargames/)
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [Dreamhack](https://dreamhack.io)
 - [PortSwigger Web Security Academy](https://portswigger.net/web-security)
-
-추천 학습 순서:
-1. OverTheWire Bandit (리눅스 기초)
-2. OWASP Top 10 (웹 취약점 기초)
-3. OverTheWire Natas (웹 공격 실습)
-4. 실제 프로젝트 보안 분석
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 
 ---
 
