@@ -1,4 +1,4 @@
-# 🛡️ OWASP Top 10 (2021)
+# 🛡️ OWASP Top 10 (2025)
 
 > 가장 중요한 웹 애플리케이션 보안 위험 Top 10
 
@@ -10,29 +10,31 @@
 
 **OWASP Top 10**은 가장 위험한 웹 애플리케이션 보안 취약점을 3-4년마다 발표합니다.
 
----
-
-## 🏆 OWASP Top 10 (2021)
-
-| 순위 | 취약점 | 위험도 | 난이도 |
-|------|--------|--------|--------|
-| **A01** | Broken Access Control | 🔴 High | ⭐⭐⭐ |
-| **A02** | Cryptographic Failures | 🔴 High | ⭐⭐⭐⭐ |
-| **A03** | Injection | 🔴 High | ⭐⭐⭐⭐ |
-| **A04** | Insecure Design | 🟡 Medium | ⭐⭐⭐ |
-| **A05** | Security Misconfiguration | 🟡 Medium | ⭐⭐ |
-| **A06** | Vulnerable Components | 🟡 Medium | ⭐⭐⭐ |
-| **A07** | Authentication Failures | 🔴 High | ⭐⭐⭐⭐ |
-| **A08** | Software & Data Integrity | 🟡 Medium | ⭐⭐⭐⭐ |
-| **A09** | Logging & Monitoring | 🟢 Low | ⭐⭐ |
-| **A10** | SSRF | 🔴 High | ⭐⭐⭐⭐ |
+> ⚠️ **2025년 업데이트**: OWASP Top 10:2025 (Final)이 공식 출시됐습니다. 이전 2021 버전은 **SUPERSEDED** 상태입니다. 2021 대비 주요 변경: Security Misconfiguration이 #5→#2로 상승, Software Supply Chain Failures(신규), Mishandling of Exceptional Conditions(신규), SSRF는 A01에 통합됐습니다.
 
 ---
 
-## 1️⃣ A01: Broken Access Control
+## 🏆 OWASP Top 10 (2025)
+
+| 순위 | 취약점 | 위험도 | 난이도 | 2021 대비 |
+|------|--------|--------|--------|-----------|
+| **A01** | Broken Access Control | 🔴 High | ⭐⭐⭐ | 유지 (SSRF 통합) |
+| **A02** | Security Misconfiguration | 🟡 Medium | ⭐⭐ | ↑ #5→#2 |
+| **A03** | Software Supply Chain Failures | 🔴 High | ⭐⭐⭐ | 🆕 신규 (A06 확장) |
+| **A04** | Cryptographic Failures | 🔴 High | ⭐⭐⭐⭐ | ↓ #2→#4 |
+| **A05** | Injection | 🔴 High | ⭐⭐⭐⭐ | ↓ #3→#5 |
+| **A06** | Insecure Design | 🟡 Medium | ⭐⭐⭐ | ↓ #4→#6 |
+| **A07** | Authentication Failures | 🔴 High | ⭐⭐⭐⭐ | 유지 (명칭 변경) |
+| **A08** | Software or Data Integrity Failures | 🟡 Medium | ⭐⭐⭐⭐ | 유지 (명칭 변경) |
+| **A09** | Security Logging & Alerting Failures | 🟢 Low | ⭐⭐ | 유지 (명칭 변경) |
+| **A10** | Mishandling of Exceptional Conditions | 🟡 Medium | ⭐⭐⭐ | 🆕 신규 (SSRF 대체) |
+
+---
+
+## 1️⃣ A01:2025 Broken Access Control
 
 ### 설명
-사용자가 권한 밖의 리소스에 접근할 수 있는 취약점
+사용자가 권한 밖의 리소스에 접근할 수 있는 취약점. 2025년부터 SSRF(Server-Side Request Forgery)가 이 카테고리에 통합됐습니다.
 
 ### 예시
 ```typescript
@@ -69,7 +71,7 @@ app.get('/api/user/:id', authMiddleware, (req, res) => {
 
 ---
 
-## 2️⃣ A02: Cryptographic Failures
+## 2️⃣ A04:2025 Cryptographic Failures
 
 ### 설명
 민감 데이터를 암호화하지 않거나 약한 암호화 사용
@@ -106,7 +108,7 @@ app.post('/login', async (req, res) => {
 
 ---
 
-## 3️⃣ A03: Injection
+## 3️⃣ A05:2025 Injection
 
 ### 설명
 신뢰할 수 없는 데이터를 명령어나 쿼리에 포함시켜 실행
@@ -143,7 +145,7 @@ app.get('/user', (req, res) => {
 
 ---
 
-## 4️⃣ A04: Insecure Design
+## 4️⃣ A06:2025 Insecure Design
 
 ### 설명
 설계 단계에서부터 보안이 고려되지 않은 경우
@@ -160,7 +162,7 @@ app.get('/user', (req, res) => {
 
 ---
 
-## 5️⃣ A05: Security Misconfiguration
+## 5️⃣ A02:2025 Security Misconfiguration ↑ (#5→#2)
 
 ### 설명
 잘못된 보안 설정으로 인한 취약점
@@ -199,10 +201,10 @@ if (process.env.NODE_ENV === 'production') {
 
 ---
 
-## 6️⃣ A06: Vulnerable and Outdated Components
+## 6️⃣ A03:2025 Software Supply Chain Failures 🆕
 
 ### 설명
-취약점이 있는 라이브러리/프레임워크 사용
+2025년 신규 카테고리. 취약점이 있는 라이브러리/프레임워크 사용(구 A06:2021)에서 확장돼, 전체 소프트웨어 의존성·빌드 시스템·배포 인프라 전반에 걸친 공급망 침해를 포함합니다. 관련 CWE: CWE-477, CWE-1104, CWE-1329, CWE-1395.
 
 ### 예시
 ```json
@@ -218,6 +220,8 @@ if (process.env.NODE_ENV === 'production') {
 ### 공격 시나리오
 - 알려진 CVE(Common Vulnerabilities and Exposures) 악용
 - Prototype Pollution (lodash 취약점)
+- 공급망 타이포스쿼팅(typosquatting) 패키지 설치
+- 악성 패키지 업스트림 주입 (빌드 시스템 침해)
 
 ### 방어
 ```bash
@@ -229,11 +233,14 @@ npm audit fix
 
 # 의존성 업데이트
 npm update
+
+# lockfile 검증 및 SRI(Subresource Integrity) 활용
+npm ci  # package-lock.json 기반으로 재현 가능한 빌드
 ```
 
 ---
 
-## 7️⃣ A07: Identification and Authentication Failures
+## 7️⃣ A07:2025 Authentication Failures
 
 ### 설명
 인증 및 세션 관리 취약점
@@ -279,7 +286,7 @@ app.post('/login', loginLimiter, async (req, res) => {
 
 ---
 
-## 8️⃣ A08: Software and Data Integrity Failures
+## 8️⃣ A08:2025 Software or Data Integrity Failures
 
 ### 설명
 무결성 검증 없이 신뢰할 수 없는 소스에서 코드/데이터 사용
@@ -307,7 +314,7 @@ app.post('/login', loginLimiter, async (req, res) => {
 
 ---
 
-## 9️⃣ A09: Security Logging and Monitoring Failures
+## 9️⃣ A09:2025 Security Logging & Alerting Failures
 
 ### 설명
 보안 로그 및 모니터링 부족
@@ -348,58 +355,70 @@ app.post('/login', (req, res) => {
 
 ---
 
-## 🔟 A10: Server-Side Request Forgery (SSRF)
+## 🔟 A10:2025 Mishandling of Exceptional Conditions 🆕
 
 ### 설명
-서버가 공격자가 지정한 URL로 요청을 보내는 취약점
+2025년 신규 카테고리 (구 A10:2021 SSRF는 A01에 통합). 비정상적인 조건(예외·오류·논리 오류)이 발생했을 때 잘못된 처리로 인해 생기는 보안 취약점입니다. 관련 CWE: CWE-209(민감 정보를 포함한 에러 메시지), CWE-234(파라미터 누락 미처리), CWE-274(권한 부족 시 잘못된 처리), CWE-476(NULL 포인터 역참조), CWE-636(실패 시 열림 상태 — Fail Open).
 
 ### 예시
 ```typescript
-// ❌ 취약한 코드
-app.get('/fetch', async (req, res) => {
-  const response = await fetch(req.query.url); // SSRF 취약점!
-  res.send(await response.text());
+// ❌ 취약한 코드: 예외 발생 시 권한 검증 우회
+async function getResource(id: string, user: User) {
+  try {
+    return await db.getResource(id);
+  } catch (e) {
+    // 오류 시 null 반환 → 호출부에서 권한 없는 것으로 처리하지 않고 통과
+    return null;
+  }
+}
+
+// ❌ 취약한 코드: 오류 메시지에 스택 트레이스·내부 정보 노출
+app.use((err, req, res, next) => {
+  res.status(500).json({ error: err.message, stack: err.stack });
 });
 ```
 
 ### 공격 시나리오
-```
-GET /fetch?url=http://localhost:6379  ← Redis 접근
-GET /fetch?url=http://169.254.169.254/latest/meta-data/  ← AWS 메타데이터
-```
+- 예외 발생 시 Fail-Open(권한 검증 건너뜀)으로 인한 인가 우회
+- 에러 메시지에서 내부 경로·DB 구조 등 민감 정보 노출
+- NULL 역참조로 인한 서비스 비정상 종료
 
 ### 방어
 ```typescript
-// ✅ 안전한 코드
-const allowedDomains = ['api.example.com', 'cdn.example.com'];
-
-app.get('/fetch', async (req, res) => {
-  const url = new URL(req.query.url);
-
-  // 도메인 화이트리스트 검증
-  if (!allowedDomains.includes(url.hostname)) {
-    return res.status(400).json({ error: 'Invalid domain' });
+// ✅ 안전한 코드: 예외 시 명시적으로 거부(Fail Secure)
+async function getResource(id: string, user: User) {
+  try {
+    const resource = await db.getResource(id);
+    if (!resource || resource.ownerId !== user.id) {
+      throw new ForbiddenError();
+    }
+    return resource;
+  } catch (e) {
+    if (e instanceof ForbiddenError) throw e;
+    throw new InternalError(); // 민감 정보 미노출
   }
+}
 
-  // 내부 IP 차단
-  if (url.hostname === 'localhost' || url.hostname.startsWith('127.') || url.hostname.startsWith('192.168.')) {
-    return res.status(400).json({ error: 'Internal IP blocked' });
-  }
-
-  const response = await fetch(url);
-  res.send(await response.text());
+// ✅ 안전한 코드: 프로덕션에서 일반 메시지만 반환
+app.use((err, req, res, next) => {
+  logger.error(err); // 내부 로그에만 상세 기록
+  const status = err.status ?? 500;
+  res.status(status).json({ error: status < 500 ? err.message : 'Internal Server Error' });
 });
 ```
+
+> ⚠️ **SSRF (구 A10:2021)**: SSRF는 A01:2025 Broken Access Control에 통합됐습니다. 내부 URL 접근 차단·도메인 화이트리스트 등 SSRF 방어는 A01 섹션을 참고하세요.
 
 ---
 
 ## 📚 참고 자료
 
-- [OWASP Top 10 2021](https://owasp.org/www-project-top-ten/)
+- [OWASP Top 10:2025 (공식)](https://owasp.org/Top10/2025/)
+- [OWASP Top 10:2025 GitHub](https://github.com/OWASP/Top10/tree/master/2025)
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
 - [PortSwigger Web Security Academy](https://portswigger.net/web-security)
 
 ---
 
-**Last Updated**: 2025-12-14
-**OWASP Top 10 Version**: 2021
+**Last Updated**: 2026-05-12
+**OWASP Top 10 Version**: 2025 (2021은 SUPERSEDED)
