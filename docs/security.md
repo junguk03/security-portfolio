@@ -2,7 +2,7 @@
 
 어떤 프로젝트에도 적용 가능한 보안 검사 규칙
 
-각 항목은 **OWASP Top 10 (2021)** 분류와 **CWE (Common Weakness Enumeration)** 코드를 명시한다.
+각 항목은 **OWASP Top 10 (2025)** 분류와 **CWE (Common Weakness Enumeration)** 코드를 명시한다.
 
 ---
 
@@ -60,18 +60,18 @@
 
 ## OWASP Top 10 매핑
 
-| OWASP 2021 | 본 문서 항목 |
+| OWASP 2025 | 본 문서 항목 |
 |------------|-------------|
-| A01 Broken Access Control | A02 인증, A03 인가/IDOR, A09 Path Traversal |
-| A02 Cryptographic Failures | A01 시크릿 노출, A16 암호화 |
-| A03 Injection | A04 입력 검증, A05 SQL Injection, A06 XSS, A08 Command Injection |
-| A04 Insecure Design | (설계 단계 — 본 문서 범위 외) |
-| A05 Security Misconfiguration | A12 에러/로깅, A14 보안 헤더, A15 세션/쿠키 |
-| A06 Vulnerable Components | A13 패키지 취약점 |
-| A07 Identification & Auth Failures | A02 인증, A15 세션/쿠키 |
-| A08 Software & Data Integrity Failures | A11 SSRF, A10 파일 업로드 |
-| A09 Security Logging Failures | A12 에러 처리/로깅 |
-| A10 SSRF | A11 SSRF |
+| A01 Broken Access Control | A02 인증, A03 인가/IDOR, A09 Path Traversal, A11 SSRF |
+| A02 Security Misconfiguration | A12 에러/로깅, A14 보안 헤더, A15 세션/쿠키 |
+| A03 Software Supply Chain Failures | A13 패키지 취약점 |
+| A04 Cryptographic Failures | A01 시크릿 노출, A16 암호화 |
+| A05 Injection | A04 입력 검증, A05 SQL Injection, A06 XSS, A08 Command Injection |
+| A06 Insecure Design | (설계 단계 — 본 문서 범위 외) |
+| A07 Authentication Failures | A02 인증, A15 세션/쿠키 |
+| A08 Software or Data Integrity Failures | A10 파일 업로드 |
+| A09 Security Logging & Alerting Failures | A12 에러 처리/로깅 |
+| A10 Mishandling of Exceptional Conditions | A12 에러 처리/로깅 |
 
 ---
 
@@ -79,7 +79,7 @@
 
 ### A01 시크릿 노출
 
-- **OWASP**: A02 Cryptographic Failures
+- **OWASP**: A04 Cryptographic Failures
 - **CWE**: [CWE-798](https://cwe.mitre.org/data/definitions/798.html) Hardcoded Credentials, [CWE-200](https://cwe.mitre.org/data/definitions/200.html) Information Exposure, [CWE-312](https://cwe.mitre.org/data/definitions/312.html) Cleartext Storage
 
 **검사 대상**
@@ -110,7 +110,7 @@ logger.info("user logged in", { userId: user.id });  // 토큰 X
 
 ### A02 인증
 
-- **OWASP**: A07 Identification and Authentication Failures
+- **OWASP**: A07 Authentication Failures
 - **CWE**: [CWE-287](https://cwe.mitre.org/data/definitions/287.html) Improper Authentication, [CWE-307](https://cwe.mitre.org/data/definitions/307.html) Improper Restriction of Excessive Auth Attempts, [CWE-521](https://cwe.mitre.org/data/definitions/521.html) Weak Password Requirements
 
 **검사 대상**
@@ -158,7 +158,7 @@ if (session.role !== 'admin') return res.status(403).end();
 
 ### A04 입력 검증
 
-- **OWASP**: A03 Injection
+- **OWASP**: A05 Injection
 - **CWE**: [CWE-20](https://cwe.mitre.org/data/definitions/20.html) Improper Input Validation, [CWE-1287](https://cwe.mitre.org/data/definitions/1287.html) Improper Validation of Specified Type
 
 **검사 대상**
@@ -181,7 +181,7 @@ if (!result.success) return res.status(400).json(result.error);
 
 ### A05 SQL Injection
 
-- **OWASP**: A03 Injection
+- **OWASP**: A05 Injection
 - **CWE**: [CWE-89](https://cwe.mitre.org/data/definitions/89.html) SQL Injection
 
 **취약 패턴**
@@ -199,7 +199,7 @@ prisma.user.findUnique({ where: { id: userId } });        // ✅ ORM
 
 ### A06 XSS
 
-- **OWASP**: A03 Injection
+- **OWASP**: A05 Injection
 - **CWE**: [CWE-79](https://cwe.mitre.org/data/definitions/79.html) Cross-site Scripting, [CWE-80](https://cwe.mitre.org/data/definitions/80.html) Basic XSS
 
 **취약 패턴**
@@ -239,7 +239,7 @@ const safe = /^https?:\/\//.test(url) ? url : '#';
 
 ### A08 Command Injection
 
-- **OWASP**: A03 Injection
+- **OWASP**: A05 Injection
 - **CWE**: [CWE-78](https://cwe.mitre.org/data/definitions/78.html) OS Command Injection, [CWE-77](https://cwe.mitre.org/data/definitions/77.html) Command Injection
 
 **취약 패턴**
@@ -279,7 +279,7 @@ if (!full.startsWith('/safe/uploads/')) throw Error('invalid');
 
 ### A10 파일 업로드
 
-- **OWASP**: A04 Insecure Design / A08 Data Integrity
+- **OWASP**: A06 Insecure Design / A08 Software or Data Integrity Failures
 - **CWE**: [CWE-434](https://cwe.mitre.org/data/definitions/434.html) Unrestricted Upload of File with Dangerous Type, [CWE-400](https://cwe.mitre.org/data/definitions/400.html) Uncontrolled Resource Consumption
 
 **검사 대상**
@@ -300,7 +300,7 @@ if (!full.startsWith('/safe/uploads/')) throw Error('invalid');
 
 ### A11 SSRF
 
-- **OWASP**: A10 Server-Side Request Forgery
+- **OWASP**: A01 Broken Access Control (SSRF, 2025 통합)
 - **CWE**: [CWE-918](https://cwe.mitre.org/data/definitions/918.html) Server-Side Request Forgery
 
 **취약 패턴**
@@ -318,7 +318,7 @@ const res = await fetch(req.query.url);
 
 ### A12 에러 처리 / 로깅
 
-- **OWASP**: A05 Security Misconfiguration, A09 Security Logging Failures
+- **OWASP**: A02 Security Misconfiguration, A09 Security Logging & Alerting Failures, A10 Mishandling of Exceptional Conditions
 - **CWE**: [CWE-209](https://cwe.mitre.org/data/definitions/209.html) Information Exposure Through Error Message, [CWE-532](https://cwe.mitre.org/data/definitions/532.html) Insertion of Sensitive Info into Log File, [CWE-778](https://cwe.mitre.org/data/definitions/778.html) Insufficient Logging
 
 **검사 대상**
@@ -340,14 +340,14 @@ try { ... } catch (e) {
 
 ### A13 패키지 취약점
 
-- **OWASP**: A06 Vulnerable and Outdated Components
+- **OWASP**: A03 Software Supply Chain Failures
 - **CWE**: [CWE-1104](https://cwe.mitre.org/data/definitions/1104.html) Use of Unmaintained Third Party Components, [CWE-937](https://cwe.mitre.org/data/definitions/937.html) Known Vulnerabilities
 
 **도구**
 | 언어 | 명령어 |
 |------|--------|
 | Node | `npm audit`, `npm audit fix`, `pnpm audit` |
-| Python | `pip-audit`, `safety check` |
+| Python | `pip-audit`, `safety scan` |
 | PHP | `composer audit` |
 | 전체 | `osv-scanner -r .`, `snyk test` |
 
@@ -361,7 +361,7 @@ try { ... } catch (e) {
 
 ### A14 보안 헤더
 
-- **OWASP**: A05 Security Misconfiguration
+- **OWASP**: A02 Security Misconfiguration
 - **CWE**: [CWE-693](https://cwe.mitre.org/data/definitions/693.html) Protection Mechanism Failure, [CWE-1021](https://cwe.mitre.org/data/definitions/1021.html) Improper Restriction of Rendered UI
 
 **필수 헤더**
@@ -381,7 +381,7 @@ try { ... } catch (e) {
 
 ### A15 세션 / 쿠키
 
-- **OWASP**: A07 Auth Failures
+- **OWASP**: A07 Authentication Failures
 - **CWE**: [CWE-614](https://cwe.mitre.org/data/definitions/614.html) Sensitive Cookie Without Secure Flag, [CWE-1004](https://cwe.mitre.org/data/definitions/1004.html) Sensitive Cookie Without HttpOnly, [CWE-384](https://cwe.mitre.org/data/definitions/384.html) Session Fixation
 
 **검사 대상**
@@ -404,7 +404,7 @@ res.cookie('session', token, {
 
 ### A16 암호화
 
-- **OWASP**: A02 Cryptographic Failures
+- **OWASP**: A04 Cryptographic Failures
 - **CWE**: [CWE-327](https://cwe.mitre.org/data/definitions/327.html) Broken/Risky Crypto Algorithm, [CWE-326](https://cwe.mitre.org/data/definitions/326.html) Inadequate Encryption Strength, [CWE-916](https://cwe.mitre.org/data/definitions/916.html) Weak Hash for Password
 
 **금지 항목**
@@ -433,6 +433,7 @@ res.cookie('session', token, {
 - [ ] `rewrites`/`redirects`가 open redirect 만들지 않는지
 - [ ] `next/image` `remotePatterns` 화이트리스트
 - [ ] Middleware에서 인증 우회 가능 경로 없는지
+- [ ] `x-middleware-subrequest` 등 내부 헤더 외부 노출 차단 (CVE-2025-29927, CVSS 9.1)
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
@@ -506,7 +507,7 @@ npm audit --json | jq '.vulnerabilities'
 
 # Python
 pip-audit
-safety check
+safety scan
 
 # 멀티 언어
 osv-scanner -r .
@@ -579,7 +580,7 @@ checkov -d .                                # Terraform/CloudFormation
 
 ## 참고 자료
 
-- [OWASP Top 10 (2021)](https://owasp.org/www-project-top-ten/)
+- [OWASP Top 10 (2025)](https://owasp.org/Top10/2025/)
 - [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) — 검증 표준
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
 - [CWE Top 25](https://cwe.mitre.org/top25/)
