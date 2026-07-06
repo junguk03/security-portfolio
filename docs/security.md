@@ -2,7 +2,7 @@
 
 어떤 프로젝트에도 적용 가능한 보안 검사 규칙
 
-각 항목은 **OWASP Top 10 (2021)** 분류와 **CWE (Common Weakness Enumeration)** 코드를 명시한다.
+각 항목은 **OWASP Top 10 (2025)** 분류와 **CWE (Common Weakness Enumeration)** 코드를 명시한다.
 
 ---
 
@@ -60,18 +60,18 @@
 
 ## OWASP Top 10 매핑
 
-| OWASP 2021 | 본 문서 항목 |
+| OWASP 2025 | 본 문서 항목 |
 |------------|-------------|
-| A01 Broken Access Control | A02 인증, A03 인가/IDOR, A09 Path Traversal |
-| A02 Cryptographic Failures | A01 시크릿 노출, A16 암호화 |
-| A03 Injection | A04 입력 검증, A05 SQL Injection, A06 XSS, A08 Command Injection |
-| A04 Insecure Design | (설계 단계 — 본 문서 범위 외) |
-| A05 Security Misconfiguration | A12 에러/로깅, A14 보안 헤더, A15 세션/쿠키 |
-| A06 Vulnerable Components | A13 패키지 취약점 |
-| A07 Identification & Auth Failures | A02 인증, A15 세션/쿠키 |
-| A08 Software & Data Integrity Failures | A11 SSRF, A10 파일 업로드 |
-| A09 Security Logging Failures | A12 에러 처리/로깅 |
-| A10 SSRF | A11 SSRF |
+| A01 Broken Access Control | A02 인증, A03 인가/IDOR, A09 Path Traversal, A11 SSRF |
+| A02 Security Misconfiguration | A12 에러/로깅, A14 보안 헤더, A15 세션/쿠키 |
+| A03 Software Supply Chain Failures | A13 패키지 취약점 |
+| A04 Cryptographic Failures | A01 시크릿 노출, A16 암호화 |
+| A05 Injection | A04 입력 검증, A05 SQL Injection, A06 XSS, A08 Command Injection |
+| A06 Insecure Design | A10 파일 업로드 (설계 단계) |
+| A07 Authentication Failures | A02 인증, A15 세션/쿠키 |
+| A08 Software or Data Integrity Failures | A10 파일 업로드 |
+| A09 Security Logging and Alerting Failures | A12 에러 처리/로깅 |
+| A10 Mishandling of Exceptional Conditions | A12 에러 처리/로깅 (신규) |
 
 ---
 
@@ -279,7 +279,7 @@ if (!full.startsWith('/safe/uploads/')) throw Error('invalid');
 
 ### A10 파일 업로드
 
-- **OWASP**: A04 Insecure Design / A08 Data Integrity
+- **OWASP**: A06 Insecure Design / A08 Software or Data Integrity Failures
 - **CWE**: [CWE-434](https://cwe.mitre.org/data/definitions/434.html) Unrestricted Upload of File with Dangerous Type, [CWE-400](https://cwe.mitre.org/data/definitions/400.html) Uncontrolled Resource Consumption
 
 **검사 대상**
@@ -300,7 +300,7 @@ if (!full.startsWith('/safe/uploads/')) throw Error('invalid');
 
 ### A11 SSRF
 
-- **OWASP**: A10 Server-Side Request Forgery
+- **OWASP**: A01 Broken Access Control (SSRF는 OWASP 2025에서 A01으로 통합)
 - **CWE**: [CWE-918](https://cwe.mitre.org/data/definitions/918.html) Server-Side Request Forgery
 
 **취약 패턴**
@@ -432,7 +432,7 @@ res.cookie('session', token, {
 - [ ] API Route / Server Action에서 인증·인가 재검증
 - [ ] `rewrites`/`redirects`가 open redirect 만들지 않는지
 - [ ] `next/image` `remotePatterns` 화이트리스트
-- [ ] Middleware에서 인증 우회 가능 경로 없는지
+- [ ] Middleware에서 인증 우회 가능 경로 없는지 (CVE-2025-29927: `x-middleware-subrequest` 헤더로 인증 우회 가능 — 14.x ≥ 14.2.25, 15.x ≥ 15.2.3으로 업그레이드)
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
@@ -579,10 +579,10 @@ checkov -d .                                # Terraform/CloudFormation
 
 ## 참고 자료
 
-- [OWASP Top 10 (2021)](https://owasp.org/www-project-top-ten/)
+- [OWASP Top 10 (2025)](https://owasp.org/Top10/2025/)
 - [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) — 검증 표준
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
-- [CWE Top 25](https://cwe.mitre.org/top25/)
+- [CWE Top 25 (2025)](https://cwe.mitre.org/top25/archive/2025/2025_cwe_top25.html)
 - [CWE Database](https://cwe.mitre.org/)
 - [CVE Database](https://cve.mitre.org/)
 - [NVD (National Vulnerability Database)](https://nvd.nist.gov/)
