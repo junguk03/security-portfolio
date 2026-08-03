@@ -1,6 +1,6 @@
 # Dreamhack
 
-![Progress](https://img.shields.io/badge/Progress-0%2F?-lightgrey)
+![Progress](https://img.shields.io/badge/Progress-1%2F?-green)
 ![Difficulty](https://img.shields.io/badge/Difficulty-All_Levels-blue)
 
 한국 보안 플랫폼 - 워게임 + 강의 + CTF
@@ -12,13 +12,15 @@
 
 ## 진행 상황
 
-⏳ 아직 시작 안 함
+| 문제 | 분야 | 풀이 |
+|------|------|------|
+| [Image Storage](./web/image-storage.md) | Web | 파일 업로드 우회 + PHP 웹쉘 |
 
 ---
 
 ## 학습 예정 분야
 
-- [ ] Web Hacking
+- [x] Web Hacking
 - [ ] System Hacking
 - [ ] Reverse Engineering
 - [ ] Forensics
