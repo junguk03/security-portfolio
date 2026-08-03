@@ -6,6 +6,7 @@
 
 > **업데이트 (2026-01)**: OWASP Top 10이 2025 버전으로 갱신됐다 (2021년 이후 첫 개정). 신규 카테고리 A03:2025 Software Supply Chain Failures, A10:2025 Mishandling of Exceptional Conditions 추가; SSRF는 A01:2025 Broken Access Control에 통합.
 
+
 ---
 
 ## 목차
@@ -64,6 +65,7 @@
 
 | OWASP 2025 | 본 문서 항목 |
 |------------|-------------|
+
 | A01:2025 Broken Access Control | A02 인증, A03 인가/IDOR, A07 CSRF, A09 Path Traversal, A11 SSRF |
 | A02:2025 Security Misconfiguration | A12 에러/로깅, A14 보안 헤더, A15 세션/쿠키 |
 | A03:2025 Software Supply Chain Failures ★신규 | A13 패키지 취약점 |
@@ -74,7 +76,16 @@
 | A08:2025 Software or Data Integrity Failures | A10 파일 업로드 |
 | A09:2025 Security Logging and Alerting Failures | A12 에러 처리/로깅 |
 | A10:2025 Mishandling of Exceptional Conditions ★신규 | A12 에러 처리/로깅 |
-
+| A01 Broken Access Control | A02 인증, A03 인가/IDOR, A09 Path Traversal, A11 SSRF (2025에서 A01에 통합) |
+| A02 Security Misconfiguration | A12 에러/로깅, A14 보안 헤더, A15 세션/쿠키 |
+| A03 Software Supply Chain Failures ★신규 | A13 패키지 취약점 |
+| A04 Cryptographic Failures | A01 시크릿 노출, A16 암호화 |
+| A05 Injection | A04 입력 검증, A05 SQL Injection, A06 XSS, A08 Command Injection |
+| A06 Insecure Design | (설계 단계 — 본 문서 범위 외) |
+| A07 Authentication Failures | A02 인증, A15 세션/쿠키 |
+| A08 Software or Data Integrity Failures | A10 파일 업로드 |
+| A09 Security Logging and Alerting Failures | A12 에러 처리/로깅 |
+| A10 Mishandling of Exceptional Conditions ★신규 | A04 입력 검증, A12 에러 처리와 연관 |
 ---
 
 ## 공통 검사 항목
@@ -434,7 +445,8 @@ res.cookie('session', token, {
 - [ ] API Route / Server Action에서 인증·인가 재검증
 - [ ] `rewrites`/`redirects`가 open redirect 만들지 않는지
 - [ ] `next/image` `remotePatterns` 화이트리스트
-- [ ] Middleware에서 인증 우회 가능 경로 없는지 (`x-middleware-subrequest` 헤더 조작 우회 — [CVE-2025-29927](https://nvd.nist.gov/vuln/detail/CVE-2025-29927))
+- [ ] Middleware를 인증의 유일한 방어선으로 사용 금지 — API/서버에서 반드시 재검증 ([CVE-2025-29927](https://www.zscaler.com/blogs/security-research/cve-2025-29927-next-js-middleware-authorization-bypass-flaw): `x-middleware-subrequest` 헤더 조작으로 미들웨어 완전 우회 가능, CVSS 9.1, 15.2.3+ / 14.2.25+ 로 업그레이드)
+- [ ] Server Components 사용 시 Next.js 최신 패치 버전 유지 ([CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know): React Flight 역직렬화 RCE, CVSS 10)
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
