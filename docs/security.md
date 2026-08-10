@@ -430,10 +430,11 @@ res.cookie('session', token, {
 - [ ] `NEXT_PUBLIC_*` 접두사에 시크릿 없는지
 - [ ] `next.config.ts`에 보안 헤더 설정
 - [ ] API Route / Server Action에서 인증·인가 재검증
-- [ ] `rewrites`/`redirects`가 open redirect 만들지 않는지
+- [ ] `rewrites`/`redirects`가 open redirect 만들지 않는지 — 외부 hostname을 요청 입력에서 동적으로 구성하면 SSRF/Open Redirect 발생 ([CVE-2026-64645](https://nextjs.org/blog/july-2026-security-release), v15.5.21+ / v16.2.11+)
 - [ ] `next/image` `remotePatterns` 화이트리스트
 - [ ] Middleware를 인증의 유일한 방어선으로 사용 금지 — API/서버에서 반드시 재검증 ([CVE-2025-29927](https://www.zscaler.com/blogs/security-research/cve-2025-29927-next-js-middleware-authorization-bypass-flaw): `x-middleware-subrequest` 헤더 조작으로 미들웨어 완전 우회 가능, CVSS 9.1, 15.2.3+ / 14.2.25+ 로 업그레이드)
 - [ ] Server Components 사용 시 Next.js 최신 패치 버전 유지 ([CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know): React Flight 역직렬화 RCE, CVSS 10)
+- [ ] 자체 호스팅(Node.js built-in 서버) 환경에서 WebSocket SSRF 차단 확인 — 미인증 공격자가 내부 HTTP 요청 강제 가능 ([CVE-2026-44578](https://nextjs.org/blog/july-2026-security-release), CVSS 8.6, v15.5.16+ / v16.2.5+)
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
@@ -442,6 +443,7 @@ res.cookie('session', token, {
 - [ ] 클라이언트 쿼리에 명시적 `.eq('user_id', user.id)` (RLS 이중 방어)
 - [ ] Storage 버킷 RLS 설정
 - [ ] Edge Function / Realtime 권한 검증
+- [ ] Apple/Azure 소셜 로그인 사용 시 Supabase Auth v2.185.0+ 적용 ([CVE-2026-31813](https://github.com/supabase/auth/security/advisories/GHSA-v36f-qvww-8w8m): OIDC ID 토큰 issuer 미검증으로 임의 사용자 세션 발급 가능)
 
 ### Node.js / Express
 - [ ] `helmet()` 미들웨어
@@ -479,7 +481,7 @@ res.cookie('session', token, {
 - [ ] `spring-security` 적용
 - [ ] CSRF 토큰 (기본 활성)
 - [ ] `@PreAuthorize` 권한 어노테이션
-- [ ] Actuator endpoint 인증 필수
+- [ ] Actuator endpoint 인증 필수 — Spring Boot 4.0.x에서 `spring-boot-health` 미사용 시 기본 보안 필터 체인 비활성화로 전 엔드포인트 무인증 노출 ([CVE-2026-40976](https://spring.io/security/cve-2026-40976/), CVSS 9.1, 4.0.6+로 업그레이드)
 - [ ] JdbcTemplate parameterized query
 
 ### Go
