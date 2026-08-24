@@ -434,6 +434,7 @@ res.cookie('session', token, {
 - [ ] `next/image` `remotePatterns` 화이트리스트
 - [ ] Middleware를 인증의 유일한 방어선으로 사용 금지 — API/서버에서 반드시 재검증 ([CVE-2025-29927](https://www.zscaler.com/blogs/security-research/cve-2025-29927-next-js-middleware-authorization-bypass-flaw): `x-middleware-subrequest` 헤더 조작으로 미들웨어 완전 우회 가능, CVSS 9.1, 15.2.3+ / 14.2.25+ 로 업그레이드)
 - [ ] Server Components 사용 시 Next.js 최신 패치 버전 유지 ([CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know): React Flight 역직렬화 RCE, CVSS 10)
+- [ ] 자체 호스팅 서버는 **15.5.21+ / 16.2.11+** 이상 사용 — WebSocket SSRF ([CVE-2026-44578](https://hadrian.io/blog/next-js-websocket-ssrf-unauthenticated-access-to-internal-resources-cve-2026-44578-2): 인증 없이 내부 서비스로 요청 위조, CVSS 8.6, 13.x·14.x는 패치 없음 → 반드시 15/16 계열 업그레이드) 및 [2026년 7월 릴리스 9개 CVE](https://nextjs.org/blog/july-2026-security-release) (rewrites SSRF·Image Optimization DoS·미들웨어 바이패스 포함) 대응; Vercel 호스팅 환경은 영향 없음
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
