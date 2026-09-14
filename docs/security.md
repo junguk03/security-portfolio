@@ -434,6 +434,7 @@ res.cookie('session', token, {
 - [ ] `next/image` `remotePatterns` 화이트리스트
 - [ ] Middleware를 인증의 유일한 방어선으로 사용 금지 — API/서버에서 반드시 재검증 ([CVE-2025-29927](https://www.zscaler.com/blogs/security-research/cve-2025-29927-next-js-middleware-authorization-bypass-flaw): `x-middleware-subrequest` 헤더 조작으로 미들웨어 완전 우회 가능, CVSS 9.1, 15.2.3+ / 14.2.25+ 로 업그레이드)
 - [ ] Server Components 사용 시 Next.js 최신 패치 버전 유지 ([CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know): React Flight 역직렬화 RCE, CVSS 10)
+- [ ] Windows 환경 배포 시 Next.js 최신 버전 유지 ([CVE-2026-75604](https://advisories.gitlab.com/npm/next/CVE-2026-75604/): `%5C` 경로 구분자 정규화 미처리 → 캐시 디렉토리 외부 파일 쓰기 → RCE, CVSS 9.0, 15.5.24+ / 16.3.3+ 로 업그레이드, Linux/macOS 미영향)
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
@@ -479,7 +480,7 @@ res.cookie('session', token, {
 - [ ] `spring-security` 적용
 - [ ] CSRF 토큰 (기본 활성)
 - [ ] `@PreAuthorize` 권한 어노테이션
-- [ ] Actuator endpoint 인증 필수
+- [ ] Actuator endpoint 인증 필수 ([CVE-2026-40976](https://spring.io/security/cve-2026-40976/): 커스텀 Security 설정 없는 서블릿 앱 + Actuator 포함 시 기본 필터 체인 인가 우회 가능, CVSS 8.6, 4.0.6+ 로 업그레이드)
 - [ ] JdbcTemplate parameterized query
 
 ### Go
