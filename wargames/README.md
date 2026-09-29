@@ -1,6 +1,6 @@
 # Wargames
 
-![Total Progress](https://img.shields.io/badge/Total-18%2F68-blue)
+![Total Progress](https://img.shields.io/badge/Total-19%2F68+-blue)
 
 온라인 워게임 풀이 모음
 
@@ -12,7 +12,7 @@
 |--------|--------|-----------|------|
 | [Bandit](./overthewire/bandit/README.md) | 초급 | 18/34 | 리눅스 기초 |
 | [Natas](./overthewire/natas/README.md) | 중급 | 0/34 | 웹 보안 |
-| [Dreamhack](./dreamhack/README.md) | 전 분야 | 0/? | 웹/시스템/리버싱 |
+| [Dreamhack](./dreamhack/README.md) | 전 분야 | 1/? | 웹/시스템/리버싱 |
 
 ---
 
