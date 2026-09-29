@@ -1,24 +1,24 @@
 # FlaskBB 보안 감사 보고서
 
 **대상**: [FlaskBB](https://github.com/flaskbb/flaskbb) (Flask 기반 오픈소스 포럼)
-**감사 일자**: 2026-09-28
-**감사 방법**: 소스코드 정적 분석 (5개 병렬 감사 에이전트)
-**분석 범위**: 인증/인가, SQL Injection, XSS/SSTI, 파일 업로드/SSRF, 로직 버그/레이스 컨디션
+**감사 일자**: 2026-09-28 (1차), 2026-09-29 (2차)
+**감사 방법**: 소스코드 정적 분석 (5개 병렬 감사 에이전트) + 심층 수동 분석
+**분석 범위**: 인증/인가, SQL Injection, XSS/SSTI, 파일 업로드/SSRF, 로직 버그/레이스 컨디션, 세션/쿠키 보안, 정보 유출, 조건부 트리거 취약점
 **Python 파일 수**: 134개
 
 ---
 
 ## 요약
 
-| 심각도 | 건수 |
-|--------|------|
-| 🔴 CRITICAL | 1 |
-| 🟠 HIGH | 1 |
-| 🟡 MEDIUM | 16 |
-| 🟢 LOW | 10 |
-| ℹ️ INFO | 7 |
+| 심각도 | 1차 | 2차 | 합계 |
+|--------|-----|-----|------|
+| 🔴 CRITICAL | 1 | 0 | 1 |
+| 🟠 HIGH | 1 | 0 | 1 |
+| 🟡 MEDIUM | 16 | 5 | 21 |
+| 🟢 LOW | 10 | 4 | 14 |
+| ℹ️ INFO | 7 | 3 | 10 |
 
-총 **28개 고유 발견** (중복 제거 후), **7개 긍정적 보안 관행** 확인.
+총 **37개 고유 발견** (중복 제거 후), **10개 긍정적 보안 관행** 확인.
 
 FlaskBB는 전반적으로 견고한 보안 아키텍처를 갖추고 있다: SQLAlchemy ORM을 통한 일관된 파라미터화, Jinja2 자동 이스케이프, `secure_filename()` 및 UUID 기반 파일 저장, `send_from_directory()` 사용, `escape=True`로 설정된 mistune 마크다운 렌더러, 견고한 오픈 리다이렉트 방어 등. 그러나 기본 설정의 하드코딩된 시크릿 키, 레이스 컨디션, 누락된 보안 헤더 등 개선이 필요한 영역이 발견되었다.
 
@@ -364,4 +364,297 @@ PIL은 `"jpeg"` 반환, `AVATAR_EXTENSIONS`는 `["jpg"]` → 비교 항상 실�
 
 ---
 
-*이 보고서는 정적 소스코드 분석 결과이며, 런타임 동적 테스트는 다음 감사 라운드에서 수행 예정.*
+---
+
+## 2차 감사 (2026-09-29) — 심층 분석
+
+2차 감사는 1차 정적 분석에서 다루지 못한 영역에 집중: 세션/쿠키 보안, 레이스 컨디션 심층 분석, 조건부 트리거 취약점, 정보 유출, 설정 의존적 보안 문제.
+
+### MEDIUM 발견 (2차)
+
+#### M-17. Remember Me 쿠키 HttpOnly 미설정
+
+- **분류**: OWASP A07 Security Misconfiguration / CWE-1004
+- **위치**: `configs/default.py:220`
+- **CVSS**: 4.7
+
+```python
+REMEMBER_COOKIE_HTTPONLY = False
+```
+
+기본 설정에서 Remember Me 쿠키(`remember_token`)의 HttpOnly 플래그가 비활성화되어 있다. XSS 취약점이 존재할 경우, JavaScript로 `document.cookie`를 통해 이 쿠키를 탈취할 수 있다.
+
+- **Docker 설정** (`configs/docker.py:51`)에서는 `True`로 올바르게 설정됨
+- **생성 템플릿** (`config.cfg.template`)에도 해당 설정 없음
+- **영향**: XSS → 세션 하이재킹 체인의 핵심 링크
+
+> **권장**: `REMEMBER_COOKIE_HTTPONLY = True`를 기본값으로 설정
+
+---
+
+#### M-18. 비밀번호 재설정 이메일 열거 (Email Enumeration)
+
+- **분류**: OWASP A01 Broken Access Control / CWE-204
+- **위치**: `auth/views.py:224-231`
+- **CVSS**: 5.3
+
+```python
+except ValidationError:
+    flash(
+        _("You have entered an username or email address that "
+          "is not linked with your account."),
+        "danger",
+    )
+else:
+    flash(_("Email sent! Please check your inbox."), "info")
+```
+
+비밀번호 재설정 요청 시, 등록되지 않은 이메일은 에러 메시지를 표시하고, 등록된 이메일은 성공 메시지를 표시한다. 공격자는 이 차이를 이용해 특정 이메일 주소의 가입 여부를 확인할 수 있다.
+
+- **공격 시나리오**: 대량의 이메일 목록을 순차 테스트하여 가입된 계정 식별 → 크리덴셜 스터핑 또는 스피어 피싱에 활용
+- **참고**: 로그인 시도 시에는 타이밍 공격 방어가 잘 되어 있으나(`check_password_hash("dummy password", secret)`), 비밀번호 재설정은 방어가 없음
+
+> **권장**: 성공/실패에 관계없이 동일한 메시지 표시 ("이메일이 등록되어 있다면 재설정 링크를 보냈습니다")
+
+---
+
+#### M-19. PostgreSQL에서 대소문자 우회 가능한 사용자명 유일성 검증
+
+- **분류**: OWASP A04 Insecure Design / CWE-178
+- **위치**: `auth/services/registration.py:108-112`
+- **CVSS**: 5.4
+- **조건**: PostgreSQL 데이터베이스 사용 시
+
+```python
+count = db.session.execute(
+    sa.select(sa.func.count(self.users.id)).filter(
+        sa.func.lower(self.users.username) == user_info.username  # ← 비교 대상이 lower() 안 됨
+    )
+).scalar_one()
+```
+
+`LOWER(username)` 컬럼과 원본(대소문자 혼합) 입력을 비교한다. PostgreSQL은 `=` 연산자가 대소문자를 구분하므로, `LOWER('admin') = 'Admin'`은 `False`를 반환한다.
+
+- **공격 시나리오**:
+  1. "admin" 계정이 이미 존재
+  2. 공격자가 "Admin"으로 가입 시도
+  3. 유일성 검증 통과 (`LOWER('admin') != 'Admin'`)
+  4. "Admin" 사용자 생성 성공 → 관리자 사칭 가능
+- **SQLite에서는 안전**: 기본 collation이 대소문자 무시
+- **영향**: 사용자 혼동, 소셜 엔지니어링, `@admin` 멘션 시 잘못된 사용자에게 알림
+
+> **권장**: `sa.func.lower(self.users.username) == sa.func.lower(user_info.username)` 또는 입력값에 `.lower()` 적용
+
+---
+
+#### M-20. 비밀번호 재설정 토큰 재사용 가능
+
+- **분류**: OWASP A07 Security Misconfiguration / CWE-613
+- **위치**: `auth/services/password.py:55-66`
+- **CVSS**: 5.9
+
+```python
+def reset_password(self, token: str, email: str, new_password: str):
+    parsed_token = self.token_serializer.loads(token)
+    if parsed_token.operation != TokenActions.RESET_PASSWORD:
+        raise TokenError.invalid()
+    self._verify_token(parsed_token, email)
+    user = db.session.execute(...)
+    user.password = new_password
+    # 토큰 무효화 로직 없음
+```
+
+비밀번호 재설정 후 사용된 JWT 토큰이 무효화되지 않는다. 토큰은 1시간 만료(`_DEFAULT_EXPIRY = timedelta(hours=1)`)까지 유효하다.
+
+- **공격 시나리오**:
+  1. 피해자가 비밀번호 재설정 링크 클릭 → 새 비밀번호 설정
+  2. 공격자가 이메일을 가로채 동일 토큰으로 다시 비밀번호 변경
+  3. 피해자는 방금 설정한 비밀번호로 로그인 불가
+- **참고**: 1차 감사 M-10과 연관 (토큰 만료만 의존, 일회용 아님)
+
+> **권장**: 토큰 사용 시 DB에 사용 기록 저장하거나, 비밀번호 변경 시 기존 토큰 모두 무효화
+
+---
+
+#### M-21. 로그인 실패 카운터 레이스 컨디션 (브루트포스 보호 우회)
+
+- **분류**: OWASP A07 Security Misconfiguration / CWE-362
+- **위치**: `auth/services/authentication.py:119`
+- **CVSS**: 5.3
+
+```python
+# MarkFailedLogin.handle_authentication_failure
+user.login_attempts += 1
+user.last_failed_login = time_utcnow()
+```
+
+`login_attempts += 1`은 Python 수준의 읽기-수정-쓰기(read-modify-write) 패턴이다. SQLAlchemy의 기본 트랜잭션 격리 수준(READ COMMITTED)에서는 동시 요청이 같은 값을 읽고 증가시킬 수 있다.
+
+- **공격 시나리오**:
+  1. 잠금 임계값: 10회 실패
+  2. 공격자가 20개 동시 로그인 요청 전송
+  3. 각 요청이 `login_attempts = 0`을 읽고 `1`로 설정
+  4. 결과: 20회 시도했지만 카운터는 1~3 정도만 증가
+  5. 브루트포스 보호가 사실상 무력화
+
+> **권장**: `User.login_attempts = User.login_attempts + 1` (SQL 수준 원자적 증가) 또는 Redis 기반 속도 제한 활용
+
+---
+
+### LOW 발견 (2차)
+
+#### L-11. 기본 설정에 세션 쿠키 보안 플래그 미설정
+
+- **분류**: CWE-614
+- **위치**: `configs/default.py` (전체)
+
+기본 설정에 `SESSION_COOKIE_SECURE`, `SESSION_COOKIE_HTTPONLY`, `SESSION_COOKIE_SAMESITE`가 정의되어 있지 않다. Flask의 기본값에 의존하므로:
+
+| 설정 | Flask 기본값 | 권장값 |
+|------|-------------|--------|
+| `SESSION_COOKIE_HTTPONLY` | `True` | `True` ✅ |
+| `SESSION_COOKIE_SECURE` | `False` | `True` (HTTPS 환경) |
+| `SESSION_COOKIE_SAMESITE` | `None` | `"Lax"` |
+
+Docker 설정에서는 올바르게 설정되어 있으나, 비-Docker 배포에서는 보호되지 않는다.
+
+> **권장**: 기본 설정에 `SESSION_COOKIE_SAMESITE = "Lax"`, `SESSION_COOKIE_SECURE = True` 추가
+
+---
+
+#### L-12. 모든 요청에서 DB 커밋 (update_lastseen)
+
+- **분류**: CWE-400
+- **위치**: `app.py:414-420`
+
+```python
+@app.before_request
+def update_lastseen():
+    if current_user.is_authenticated:
+        current_user.lastseen = time_utcnow()
+        db.session.add(current_user)
+        db.session.commit()
+```
+
+인증된 사용자의 모든 HTTP 요청마다 `UPDATE` + `COMMIT`이 실행된다. 정적 파일 요청에도 적용되며:
+- 성능 오버헤드 (요청당 추가 DB 왕복)
+- 동일 사용자의 동시 요청 시 레이스 컨디션 가능
+- DoS 공격 시 DB 부하 증폭
+
+> **권장**: 시간 기반 쓰로틀링 (예: 5분마다 갱신) 또는 Redis 기반 추적으로 변경
+
+---
+
+#### L-13. 보안 응답 헤더 전면 부재
+
+- **분류**: OWASP A05 Security Misconfiguration / CWE-693
+- **위치**: 전체 코드베이스
+
+1차 감사 M-09 (CSP 미설정)에 추가하여, 다음 헤더도 전혀 설정되지 않음:
+
+| 헤더 | 용도 | 상태 |
+|------|------|------|
+| `X-Content-Type-Options: nosniff` | MIME 스니핑 방지 | ❌ |
+| `X-Frame-Options: SAMEORIGIN` | 클릭재킹 방지 | ❌ |
+| `Strict-Transport-Security` | HTTPS 강제 | ❌ |
+| `Referrer-Policy` | Referer 유출 제어 | ❌ |
+| `Permissions-Policy` | 브라우저 기능 제한 | ❌ |
+
+> **권장**: Flask `@app.after_request`에서 보안 헤더 일괄 설정, 또는 `flask-talisman` 패키지 사용
+
+---
+
+#### L-14. Host Header Poisoning 위험 (기본 설정)
+
+- **분류**: CWE-644
+- **위치**: `configs/default.py:63`, `app.py:233-246`
+
+```python
+TRUSTED_HOSTS = None  # 기본값
+```
+
+`TRUSTED_HOSTS`와 `SERVER_NAME`이 모두 `None`이면, 비밀번호 재설정 이메일의 `url_for(_external=True)`가 공격자의 `Host` 헤더를 반영할 수 있다.
+
+- **공격 시나리오**:
+  1. 공격자가 `Host: evil.com` 헤더로 비밀번호 재설정 요청
+  2. 생성된 재설정 링크: `http://evil.com/auth/reset-password?token=...`
+  3. 피해자가 이메일의 링크 클릭 → 공격자 서버로 토큰 전송
+- **완화**: `app.py`에서 경고 로그 출력하지만 요청은 차단하지 않음
+- **참고**: Flask 3.x의 `TRUSTED_HOSTS` 기능으로 완화 가능하나, 기본값이 `None`
+
+> **권장**: `TRUSTED_HOSTS = ["your-domain.com"]` 을 설정 필수 항목으로 문서화하고, 미설정 시 시작을 차단하는 것을 검토
+
+---
+
+### INFO 발견 (2차)
+
+#### I-08. DebugToolbar 무조건 초기화
+
+- **위치**: `app.py:310`, `extensions.py:80`
+
+`debugtoolbar.init_app(app)`가 `DEBUG` 플래그와 무관하게 모든 환경에서 호출된다. Flask-DebugToolbar 자체가 `DEBUG=True`일 때만 활성화되므로 프로덕션에서는 안전하지만, `DEBUG=True`가 실수로 프로덕션에 설정될 경우 SQL 쿼리, 설정 변수, 요청 데이터 등이 노출된다.
+
+---
+
+#### I-09. Celery 브로커 기본 인증 없음
+
+- **위치**: `configs/default.py:280`
+
+```python
+CELERY_CONFIG = {
+    "broker_url": "redis://localhost:6379",
+    "result_backend": "redis://localhost:6379",
+}
+```
+
+기본 Celery 브로커가 인증 없는 Redis를 사용한다. Redis가 네트워크에 노출될 경우, 공격자가 악성 Celery 태스크를 주입할 수 있다. 다만 FlaskBB의 Celery 태스크는 이메일 발송만 담당하므로 직접적인 RCE 위험은 제한적이다. Celery의 기본 직렬화 형식은 JSON(`task_serializer = "json"`)이므로 pickle 역직렬화 공격은 불가하다.
+
+---
+
+#### I-10. SimpleCache 기반 권한 메모이제이션의 멀티워커 불일치
+
+- **위치**: `configs/default.py:241`, `user/models.py:381-406`
+
+```python
+CACHE_TYPE = "SimpleCache"  # 프로세스 내 메모리 캐시
+
+@cache.memoize()
+def get_permissions(self, exclude=None):
+    ...
+```
+
+기본 캐시가 인-프로세스(`SimpleCache`)이므로, Gunicorn 등 멀티워커 배포에서는 한 워커에서 권한이 변경되어도 다른 워커의 캐시에는 반영되지 않는다. 관리자가 사용자의 권한을 박탈해도, 해당 사용자가 다른 워커에 요청하면 최대 60초(`CACHE_DEFAULT_TIMEOUT`)간 이전 권한으로 접근할 수 있다.
+
+> **권장**: 프로덕션에서는 `CACHE_TYPE = "redis"`를 사용하여 캐시를 공유
+
+---
+
+### 2차 감사 — 긍정적 보안 관행
+
+- ✅ **타이밍 공격 방어**: 로그인 시 사용자 미존재 시에도 `check_password_hash("dummy password", secret)` 실행하여 응답 시간 일정 유지
+- ✅ **scrypt 비밀번호 해싱**: Werkzeug 3.x의 `generate_password_hash()` 기본값인 scrypt 사용 (Argon2id 다음으로 권장되는 알고리즘)
+- ✅ **에러 핸들러 정보 유출 방지**: 403/404/500 커스텀 에러 페이지 사용, DB 에러 시 비관리자에게 일반 메시지만 표시
+
+---
+
+### 2차 감사 방법론
+
+| 분석 영역 | 접근 방식 |
+|-----------|----------|
+| 세션/쿠키 보안 | `configs/default.py`, `configs/docker.py`, `config.cfg.template` 비교 분석 |
+| 레이스 컨디션 | `+= 1` 패턴 전수 검색, SQLAlchemy 격리 수준 확인, 동시성 시나리오 구성 |
+| 조건부 트리거 | DB별 동작 차이(SQLite vs PostgreSQL), 설정 조합별 보안 영향 분석 |
+| 정보 유출 | 에러 핸들러, DebugToolbar, 인증 응답 차이, Host 헤더 반영 분석 |
+| 암호화 검증 | Werkzeug 해싱 알고리즘, JWT 구현, 토큰 수명주기 분석 |
+
+---
+
+## 다음 감사 계획
+
+- **3차**: 의존성 취약점 스캔 (30+ 패키지 CVE 확인), Celery 태스크 직렬화 보안, Docker 설정 감사
+- **4차**: 플러그인 생태계 감사 (conversations, portal 플러그인), 동적 분석 (Burp Suite / ZAP)
+- **5차**: 마크다운 퍼저 테스트 (mistune 엣지 케이스), 유니코드 정규화 공격
+
+---
+
+*1차 보고서: 정적 소스코드 분석 (2026-09-28). 2차 보고서: 심층 수동 분석 — 세션 보안, 레이스 컨디션, 조건부 트리거, 정보 유출 (2026-09-29).*
