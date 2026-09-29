@@ -434,6 +434,8 @@ res.cookie('session', token, {
 - [ ] `next/image` `remotePatterns` 화이트리스트
 - [ ] Middleware를 인증의 유일한 방어선으로 사용 금지 — API/서버에서 반드시 재검증 ([CVE-2025-29927](https://www.zscaler.com/blogs/security-research/cve-2025-29927-next-js-middleware-authorization-bypass-flaw): `x-middleware-subrequest` 헤더 조작으로 미들웨어 완전 우회 가능, CVSS 9.1, 15.2.3+ / 14.2.25+ 로 업그레이드)
 - [ ] Server Components 사용 시 Next.js 최신 패치 버전 유지 ([CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know): React Flight 역직렬화 RCE, CVSS 10)
+- [ ] 이미지 최적화 API 사용 시 15.5.24+ / 16.3.3+ 으로 즉시 업그레이드 ([GHSA-2xp9-vwfh-vxw4](https://github.com/advisories/GHSA-2xp9-vwfh-vxw4): AVIF 처리 시 인증 없는 RCE — `sharp`/`libheif` 취약점, CVSS 9.5)
+- [ ] Windows 서버 배포 시 15.5.24+ / 16.3.3+ 으로 즉시 업그레이드 ([CVE-2026-75604](https://github.com/advisories/GHSA-p293-qw3h-jr36): 경로 탐색으로 인한 RCE, CVSS 9.0, 워크어라운드 없음)
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
@@ -462,6 +464,7 @@ res.cookie('session', token, {
 - [ ] `ALLOWED_HOSTS` 명시
 - [ ] `CSRF_COOKIE_SECURE`, `SESSION_COOKIE_SECURE = True`
 - [ ] Raw SQL은 `params` 사용, f-string 금지
+- [ ] ASGI 서버(`uvicorn`, `daphne` 등) 사용 시 최신 Django 버전 유지 ([CVE-2026-3902](https://github.com/advisories/GHSA-mvfq-ggxm-9mc5): 언더스코어·하이픈 혼동으로 헤더 스푸핑 가능, HIGH)
 
 ### Flask
 - [ ] `Flask-WTF` CSRF 토큰
