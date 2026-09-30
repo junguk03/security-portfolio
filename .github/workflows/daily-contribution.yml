@@ -23,6 +23,6 @@ jobs:
         run: |
           git config user.name "junguk03"
           git config user.email "junkuk9503@gmail.com"
-          git add contributions.log
+          git add -f contributions.log
           git diff --cached --quiet || git commit -m "chore: daily contribution $(date -u '+%Y-%m-%d')"
           git push
