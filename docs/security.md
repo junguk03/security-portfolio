@@ -280,7 +280,7 @@ if (!full.startsWith('/safe/uploads/')) throw Error('invalid');
 ### A10 파일 업로드
 
 - **OWASP**: A06 Insecure Design / A08 Software or Data Integrity Failures
-- **CWE**: [CWE-434](https://cwe.mitre.org/data/definitions/434.html) Unrestricted Upload of File with Dangerous Type, [CWE-400](https://cwe.mitre.org/data/definitions/400.html) Uncontrolled Resource Consumption
+- **CWE**: [CWE-434](https://cwe.mitre.org/data/definitions/434.html) Unrestricted Upload of File with Dangerous Type, [CWE-400](https://cwe.mitre.org/data/definitions/400.html) Uncontrolled Resource Consumption, [CWE-770](https://cwe.mitre.org/data/definitions/770.html) Allocation of Resources Without Limits or Throttling
 
 **검사 대상**
 - 확장자 검증 없음 → `.php`, `.jsp`, `.aspx`, `.svg` 업로드 가능
@@ -433,7 +433,7 @@ res.cookie('session', token, {
 - [ ] `rewrites`/`redirects`가 open redirect 만들지 않는지
 - [ ] `next/image` `remotePatterns` 화이트리스트
 - [ ] Middleware를 인증의 유일한 방어선으로 사용 금지 — API/서버에서 반드시 재검증 ([CVE-2025-29927](https://www.zscaler.com/blogs/security-research/cve-2025-29927-next-js-middleware-authorization-bypass-flaw): `x-middleware-subrequest` 헤더 조작으로 미들웨어 완전 우회 가능, CVSS 9.1, 15.2.3+ / 14.2.25+ 로 업그레이드)
-- [ ] Server Components 사용 시 Next.js 최신 패치 버전 유지 ([CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know): React Flight 역직렬화 RCE, CVSS 10)
+- [ ] Next.js 최신 패치 버전 유지 (15.5.24+ / 16.3.3+) — [CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know): React Flight 역직렬화 RCE (CVSS 10); [CVE-2026-75604](https://vulert.com/vuln-db/CVE-2026-75604): Windows 서버에서 인코딩된 경로 구분자로 캐시 루트 우회 → 암호화 키 노출 → RCE (CVSS 9.0, 15.5.24+ / 16.3.3+ 에서 수정)
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
