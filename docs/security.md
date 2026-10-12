@@ -434,6 +434,7 @@ res.cookie('session', token, {
 - [ ] `next/image` `remotePatterns` 화이트리스트
 - [ ] Middleware를 인증의 유일한 방어선으로 사용 금지 — API/서버에서 반드시 재검증 ([CVE-2025-29927](https://www.zscaler.com/blogs/security-research/cve-2025-29927-next-js-middleware-authorization-bypass-flaw): `x-middleware-subrequest` 헤더 조작으로 미들웨어 완전 우회 가능, CVSS 9.1, 15.2.3+ / 14.2.25+ 로 업그레이드)
 - [ ] Server Components 사용 시 Next.js 최신 패치 버전 유지 ([CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know): React Flight 역직렬화 RCE, CVSS 10)
+- [ ] SSG/ISR + root catch-all 조합 시 캐시 중독 패치 버전 유지 ([CVE-2026-94484](https://github.com/advisories/GHSA-mcj8-r9mp-w47p): 미인증 요청으로 공유 캐시 오염 → 크로스 유저 콘텐츠 치환 또는 DoS 가능, CVSS 6.3, 15.5.27+ / 16.3.8+ 로 업그레이드)
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
@@ -442,6 +443,7 @@ res.cookie('session', token, {
 - [ ] 클라이언트 쿼리에 명시적 `.eq('user_id', user.id)` (RLS 이중 방어)
 - [ ] Storage 버킷 RLS 설정
 - [ ] Edge Function / Realtime 권한 검증
+- [ ] Apple/Azure OAuth 사용 시 Supabase Auth 2.185.0+ 유지 ([CVE-2026-31813](https://nvd.nist.gov/vuln/detail/CVE-2026-31813): ID 토큰 플로우 취약점으로 임의 유저 세션 발급 가능, CVSS 4.8)
 
 ### Node.js / Express
 - [ ] `helmet()` 미들웨어
@@ -479,7 +481,7 @@ res.cookie('session', token, {
 - [ ] `spring-security` 적용
 - [ ] CSRF 토큰 (기본 활성)
 - [ ] `@PreAuthorize` 권한 어노테이션
-- [ ] Actuator endpoint 인증 필수
+- [ ] Actuator endpoint 인증 필수 ([CVE-2026-40976](https://spring.io/security/cve-2026-40976): `spring-boot-health` 미포함 시 기본 필터체인 인가 누락으로 `/actuator/env`, `/actuator/heapdump` 등 미인증 접근 가능, CVSS 9.1, 4.0.6+ / 3.5.14+ / 3.4.16+ / 3.3.19+ 로 업그레이드)
 - [ ] JdbcTemplate parameterized query
 
 ### Go
