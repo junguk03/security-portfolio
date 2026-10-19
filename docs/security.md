@@ -433,7 +433,8 @@ res.cookie('session', token, {
 - [ ] `rewrites`/`redirects`가 open redirect 만들지 않는지
 - [ ] `next/image` `remotePatterns` 화이트리스트
 - [ ] Middleware를 인증의 유일한 방어선으로 사용 금지 — API/서버에서 반드시 재검증 ([CVE-2025-29927](https://www.zscaler.com/blogs/security-research/cve-2025-29927-next-js-middleware-authorization-bypass-flaw): `x-middleware-subrequest` 헤더 조작으로 미들웨어 완전 우회 가능, CVSS 9.1, 15.2.3+ / 14.2.25+ 로 업그레이드)
-- [ ] Server Components 사용 시 Next.js 최신 패치 버전 유지 ([CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know): React Flight 역직렬화 RCE, CVSS 10)
+- [ ] App Router (15.x / 16.x) 사용 시 최신 패치 버전 유지 — stable 14.x, Pages Router, Edge Runtime은 미영향 ([CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know) / [CVE-2025-66478](https://nextjs.org/blog/CVE-2025-66478): React Flight 역직렬화 RCE, CVSS 10, 악용 사례 확인됨 — 15.5.7+ / 16.0.7+ 패치)
+- [ ] **[2026-10-14 긴급 패치]** 16.4.1 또는 15.5.28로 즉시 업그레이드 ([CVE-2026-96889](https://securityonline.info/nextjs-security-update-rce-october-2026/): 이미지 최적화 API SVG RCE CVSS 9.5; [GHSA-673q-mjm6-r5xr](https://securityonline.info/nextjs-security-update-rce-october-2026/): `use cache` + 타입 배열 RCE CVSS 9.5; [GHSA-p3m5-59mp-jv5r](https://securityonline.info/nextjs-security-update-rce-october-2026/): Server Actions DoS CVSS 8.2)
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
@@ -481,6 +482,7 @@ res.cookie('session', token, {
 - [ ] `@PreAuthorize` 권한 어노테이션
 - [ ] Actuator endpoint 인증 필수
 - [ ] JdbcTemplate parameterized query
+- [ ] Spring Boot 4.0.x → 4.0.6+ 업그레이드 ([CVE-2026-40976](https://research.averlon.ai/vulnerability-intelligence/cve/CVE-2026-40976): 기본 웹 보안 우회 CVSS 9.1 — Actuator 의존·자체 Spring Security 미설정 환경에 영향)
 
 ### Go
 - [ ] `database/sql` placeholder 사용 (`?`, `$1`)
