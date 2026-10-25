@@ -434,6 +434,8 @@ res.cookie('session', token, {
 - [ ] `next/image` `remotePatterns` 화이트리스트
 - [ ] Middleware를 인증의 유일한 방어선으로 사용 금지 — API/서버에서 반드시 재검증 ([CVE-2025-29927](https://www.zscaler.com/blogs/security-research/cve-2025-29927-next-js-middleware-authorization-bypass-flaw): `x-middleware-subrequest` 헤더 조작으로 미들웨어 완전 우회 가능, CVSS 9.1, 15.2.3+ / 14.2.25+ 로 업그레이드)
 - [ ] Server Components 사용 시 Next.js 최신 패치 버전 유지 ([CVE-2025-55182](https://www.oligo.security/blog/critical-react-next-js-rce-vulnerability-cve-2025-55182-cve-2025-66478-what-you-need-to-know): React Flight 역직렬화 RCE, CVSS 10)
+- [ ] AVIF 이미지 최적화 사용 시 15.5.24+ / 16.3.3+으로 업그레이드 ([GHSA-2xp9-vwfh-vxw4](https://github.com/vercel/next.js/security/advisories/GHSA-2xp9-vwfh-vxw4): libheif 힙 버퍼 오버플로우 → 인증 없는 RCE, CVSS 4: 9.5; 패치 버전에서 AVIF 최적화 임시 비활성화)
+- [ ] Windows 환경에서 Pages Router와 App Router 동시 사용 시 Cache Components 설정 확인 ([CVE-2026-75604](https://thehackernews.com/2026/08/nextjs-patches-critical-avif-and.html): Windows 경로 탐색 취약점 → 인증 없는 RCE, CVSS 9.0, 15.5.24+ / 16.3.3+ 패치)
 
 ### Supabase
 - [ ] **모든 테이블 RLS 활성화**
@@ -442,6 +444,7 @@ res.cookie('session', token, {
 - [ ] 클라이언트 쿼리에 명시적 `.eq('user_id', user.id)` (RLS 이중 방어)
 - [ ] Storage 버킷 RLS 설정
 - [ ] Edge Function / Realtime 권한 검증
+- [ ] Apple/Azure OIDC 로그인 활성화 시 `@supabase/auth` 2.185.0+으로 업그레이드 ([CVE-2026-31813](https://www.sentinelone.com/vulnerability-database/cve-2026-31813/): OIDC ID 토큰 issuer 검증 우회로 임의 사용자 세션 발급 가능)
 
 ### Node.js / Express
 - [ ] `helmet()` 미들웨어
@@ -583,7 +586,7 @@ checkov -d .                                # Terraform/CloudFormation
 - [OWASP Top 10 (2025)](https://owasp.org/Top10/2025/)
 - [OWASP ASVS](https://owasp.org/www-project-application-security-verification-standard/) — 검증 표준
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
-- [CWE Top 25](https://cwe.mitre.org/top25/)
+- [CWE Top 25 (2025)](https://cwe.mitre.org/top25/archive/2025/2025_cwe_top25.html)
 - [CWE Database](https://cwe.mitre.org/)
 - [CVE Database](https://cve.mitre.org/)
 - [NVD (National Vulnerability Database)](https://nvd.nist.gov/)
